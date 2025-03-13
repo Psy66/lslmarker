@@ -4,6 +4,7 @@
 ![License](https://img.shields.io/badge/License-MIT-green)
 ![Python](https://img.shields.io/badge/Python-3.8%2B-yellow)
 ![C++](https://img.shields.io/badge/C%2B%2B-17-blue)
+![Platform](https://img.shields.io/badge/Platform-Windows_x64-0078d7)
 
 A tool for creating and sending events to an LSL (Lab Streaming Layer) stream. The project is implemented in two versions: **Python** (with a graphical interface) and **C++** (for Windows).
 

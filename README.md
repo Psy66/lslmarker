@@ -89,6 +89,16 @@ If you don't want to build the project yourself, you can download the pre-built 
 
 ---
 
+## 📚 Citation
+
+If you use this tool in your research, please consider citing it as follows:
+
+```
+Petrenko, Timur. LSL Maker Event. 2025. Available on GitHub: https://github.com/Psy66/lslmarker.
+```
+
+---
+
 ## 📜 License
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
@@ -96,3 +106,11 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ## 🙏 Acknowledgments
 - Thanks to the [LSL community](https://github.com/sccn/liblsl) for providing the Lab Streaming Layer library.
+
+---
+
+### 📢 Important Note
+
+This application is intended for educational and research purposes only. Use it at your own risk. The author does not take any responsibility for potential issues or damages caused by the use of this software.
+
+---

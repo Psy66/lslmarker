@@ -84,7 +84,7 @@ If you don't want to build the project yourself, you can download the pre-built 
 ---
 
 ## 👨‍💻 Author
-- **Tim Liner**  
+- **Timur Petrenko**  
   Email: psy66@narod.ru
 
 ---

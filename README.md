@@ -76,7 +76,7 @@ python gui.py
 
 ### 📥 Pre-built Release
 If you don't want to build the project yourself, you can download the pre-built Windows x64 version:
-- [LSL_Maker_Event_ver1.0.zip](release/LSL_Maker_Event_ver1.0.zip)
+- [LSL_Maker_Event_ver1.0.zip](Release/LSL_Maker_Event_ver1.0.zip)
 
 ### 📚 Dependencies
 - [LSL Library](https://github.com/sccn/liblsl): Ensure the LSL library is installed and linked correctly.

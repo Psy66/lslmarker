@@ -6,37 +6,37 @@
 
 #define MAX_LOADSTRING 100
 
-// Глобальные переменные:
-HINSTANCE hInst;                                // текущий экземпляр
-WCHAR szTitle[MAX_LOADSTRING];                  // Текст строки заголовка
-WCHAR szWindowClass[MAX_LOADSTRING];            // имя класса главного окна
+// Global variables:
+HINSTANCE hInst;                                // current instance
+WCHAR szTitle[MAX_LOADSTRING];                  // The text of the title bar
+WCHAR szWindowClass[MAX_LOADSTRING];            // the name of the main window class
 
-// Элементы управления
-std::vector<HWND> eventEdits;  // Поля ввода для событий
-std::vector<HWND> eventButtons;  // Кнопки для отправки событий
-lsl::stream_outlet* outlet = nullptr;  // LSL-поток для отправки маркеров
+// Controls
+std::vector<HWND> eventEdits;  // Event input fields
+std::vector<HWND> eventButtons;  // Buttons for sending events
+lsl::stream_outlet* outlet = nullptr;  // LSL stream for sending markers
 
-// Отправить объявления функций, включенных в этот модуль кода:
+// Forward declarations of functions included in this code module:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
 
-// Функция для создания LSL-потока
+// Function to create an LSL stream
 void CreateLSLStream() {
     lsl::stream_info info("LSLMakerEvent", "Markers", 1, 0, lsl::cf_int32, "myuidw43536");
     outlet = new lsl::stream_outlet(info);
 }
 
-// Функция для отправки события
+// Function to send an event
 void SendEvent(int eventIndex) {
     char buffer[256];
     GetWindowTextA(eventEdits[eventIndex], buffer, 256);
     std::string eventText(buffer);
 
     if (!eventText.empty()) {
-        outlet->push_sample(&eventIndex, 1);  // Отправка маркера
-        OutputDebugStringA(("Событие '" + eventText + "' отправлено с маркером " + std::to_string(eventIndex + 1) + "\n").c_str());
+        outlet->push_sample(&eventIndex, 1);  // Send the marker
+        OutputDebugStringA(("Event '" + eventText + "' sent with marker " + std::to_string(eventIndex + 1) + "\n").c_str());
     }
 }
 
@@ -48,12 +48,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
 
-    // Инициализация глобальных строк
+    // Initialize global strings
     LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
     LoadStringW(hInstance, IDC_LSLMAKER, szWindowClass, MAX_LOADSTRING);
     MyRegisterClass(hInstance);
 
-    // Выполнить инициализацию приложения:
+    // Perform application initialization:
     if (!InitInstance(hInstance, nCmdShow))
     {
         return FALSE;
@@ -63,7 +63,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     MSG msg;
 
-    // Цикл основного сообщения:
+    // Main message loop:
     while (GetMessage(&msg, nullptr, 0, 0))
     {
         if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
@@ -73,16 +73,16 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         }
     }
 
-    // Освобождение ресурсов
+    // Release resources
     delete outlet;
 
     return (int)msg.wParam;
 }
 
 //
-//  ФУНКЦИЯ: MyRegisterClass()
+//  FUNCTION: MyRegisterClass()
 //
-//  ЦЕЛЬ: Регистрирует класс окна.
+//  PURPOSE: Registers the window class.
 //
 ATOM MyRegisterClass(HINSTANCE hInstance)
 {
@@ -106,13 +106,13 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 }
 
 //
-//   ФУНКЦИЯ: InitInstance(HINSTANCE, int)
+//   FUNCTION: InitInstance(HINSTANCE, int)
 //
-//   ЦЕЛЬ: Сохраняет маркер экземпляра и создает главное окно
+//   PURPOSE: Saves the instance handle and creates the main window
 //
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
-    hInst = hInstance; // Сохранить маркер экземпляра в глобальной переменной
+    hInst = hInstance; // Save instance handle in a global variable
 
     HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
         CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
@@ -129,9 +129,9 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 }
 
 //
-//  ФУНКЦИЯ: WndProc(HWND, UINT, WPARAM, LPARAM)
+//  FUNCTION: WndProc(HWND, UINT, WPARAM, LPARAM)
 //
-//  ЦЕЛЬ: Обрабатывает сообщения в главном окне.
+//  PURPOSE: Processes messages for the main window.
 //
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -139,31 +139,31 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
     case WM_CREATE:
     {
-        // Создание элементов управления
+        // Create controls
         for (int i = 0; i < 5; ++i) {
-            // Метка для события
-            CreateWindowW(L"STATIC", (L"Событие " + std::to_wstring(i + 1) + L":").c_str(),
+            // Label for the event
+            CreateWindowW(L"STATIC", (L"Event " + std::to_wstring(i + 1) + L":").c_str(),
                 WS_VISIBLE | WS_CHILD, 10, 10 + i * 50, 100, 20, hWnd, nullptr, hInst, nullptr);
 
-            // Поле ввода для события
+            // Input field for the event
             HWND hEdit = CreateWindowW(L"EDIT", L"",
                 WS_VISIBLE | WS_CHILD | WS_BORDER | ES_AUTOHSCROLL,
                 120, 10 + i * 50, 200, 20, hWnd, nullptr, hInst, nullptr);
             eventEdits.push_back(hEdit);
 
-            // Кнопка для отправки события
-            HWND hButton = CreateWindowW(L"BUTTON", L"Отправить",
+            // Button for sending the event
+            HWND hButton = CreateWindowW(L"BUTTON", L"Send",
                 WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON,
                 330, 10 + i * 50, 100, 20, hWnd, (HMENU)(100 + i), hInst, nullptr);
             eventButtons.push_back(hButton);
         }
 
-        // Кнопка выхода
-        CreateWindowW(L"BUTTON", L"Выход",
+        // Exit button
+        CreateWindowW(L"BUTTON", L"Exit",
             WS_VISIBLE | WS_CHILD | BS_PUSHBUTTON,
             120, 260, 100, 30, hWnd, (HMENU)200, hInst, nullptr);
 
-        // Создание LSL-потока
+        // Create the LSL stream
         CreateLSLStream();
     }
     break;
@@ -171,12 +171,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_COMMAND:
     {
         int wmId = LOWORD(wParam);
-        // Обработка нажатий на кнопки
+        // Handle button clicks
         if (wmId >= 100 && wmId < 105) {
-            SendEvent(wmId - 100);  // Отправка события
+            SendEvent(wmId - 100);  // Send the event
         }
         else if (wmId == 200) {
-            // Выход
+            // Exit
             DestroyWindow(hWnd);
         }
     }
@@ -192,7 +192,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
-// Обработчик сообщений для окна "О программе".
+// Message handler for the "About" window.
 INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     UNREFERENCED_PARAMETER(lParam);
